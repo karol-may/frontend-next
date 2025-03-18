@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ModeToggle } from "@/components/ModeToggle";
 import { createClient } from "@/utils/supabase/client";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/auth-js";
 import {CircleUser, LogOutIcon} from "lucide-react";

@@ -1,6 +1,5 @@
 "use client";
 
-import {createClient} from "@/utils/supabase/client";
 import {SetStateAction, useEffect, useState} from "react";
 import {Teacher} from "@/types/Teacher";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
@@ -12,24 +11,34 @@ import {fetchTeachers} from "@/components/teachers/actions";
 function TeachersList() {
   const [selectedCity, setSelectedCity] = useState<string>("Wyszków");
   const [nameSearchQuery, setNameSearchQuery] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [error, setError] = useState<Error | null>(null);
+  const [teachers, setTeachers] = useState<Teacher[] | null>(null);
   const [online, setOnline] = useState(false);
   const [studentsLocation, setStudentsLocation] = useState(false);
   const [teachersLocation, setTeachersLocation] = useState(false);
 
   useEffect(() => {
-    fetchTeachers(selectedCity, online, studentsLocation, teachersLocation, nameSearchQuery, setTeachers, setError);
+    fetchTeachers(selectedCity, online, studentsLocation, teachersLocation, nameSearchQuery)
+      .then(({ data, error }) => {
+        if (error) {
+          setError(error);
+        } else {
+          setTeachers(data);
+          setError(null); // Czyszczenie błędu, jeśli zapytanie się powiodło
+        }
+      })
+      .catch(otherError => setError(otherError)); // Obsługa nieoczekiwanych błędów
   }, [online, studentsLocation, teachersLocation, nameSearchQuery, selectedCity]);
 
+
   function queryInputOnChangeHandler(event: { target: { value: SetStateAction<string>; }; }) {
-      let value = event.target.value;
+      const value = event.target.value;
         setNameSearchQuery(value);
   }
 
   return (
     <>
-      {error && <p style={{color: "red"}}>Błąd: {error}</p>}
+      {error && <p style={{color: "red"}}>Błąd: {error.message}</p>}
       <div className={"space-y-4"}>
         <Input onChange={queryInputOnChangeHandler} value={nameSearchQuery}/>
         <TeacherListFilterBoolean name={"Pokaż nauczycieli oferujących nauczanie zdalne?"} desc={"Nauczanie za pomocą internetu."} checked={online} onCheckedChange={setOnline}/>
@@ -45,7 +54,7 @@ function TeachersList() {
             <SelectItem value="Warszawa">Warszawa</SelectItem>
           </SelectContent>
         </Select>
-        {teachers.map((teacher) => (
+        {teachers?.map((teacher) => (
           <TeachersListElement key={teacher.id} teacher={teacher}/>
         ))}
       </div>
