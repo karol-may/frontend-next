@@ -29,26 +29,26 @@ function ProfilePage() {
   }, []);
 
   useEffect(() => {
-    if (!user?.id) {
-      setError("Nie ma tu jeszcze ID");
-      return;
-    }
-
-    fetchTeacher(user.id)
-      .then(({ data, error }) => {
-        if (error) {
+    if (user?.id) {
+      fetchTeacher(user?.id)
+        .then(response => {
+          if (response.error) {
+            setError(response.error.message)
+          }
+          if (response.teachers) {
+            setTeacher(response.teachers[0])
+          }
+        })
+        .catch((error: Error)=>{
           setError(error.message);
-        } else if (data && data.length > 0) {
-          setTeacher(data[0]);
-        } else {
-          setError("Nie znaleziono nauczyciela.");
-        }
-      })
-      .catch(err => setError(err.message)); // Obsługa błędów niezwiązanych z Supabase
-  }, [user?.id]);
+        })
+    } else {
+      setError("Nie ma tu jeszcze ID")
+    }
+  }, [user]);
 
 
-  function toggleTeachersBooleanPropertyState(propertyToToggle: ("online"|"teachers_location"|"students_location")) {
+  function toggleTeacherBooleanParameter(propertyToToggle: ("online"|"teachers_location"|"students_location")) {
     setTeacher(prevTeacher => ({
       ...prevTeacher,
       [propertyToToggle]: !prevTeacher?.[propertyToToggle]
@@ -59,11 +59,11 @@ function ProfilePage() {
 
     const teacher = formDataToTeacherConverter(formData);
 
-    updateTeacher(teacher).then(({ data, error }) => {
+    updateTeacher(teacher).then(({ teachers, error }) => {
       if (error) {
         setError(error.message);
-      } else if (data && data.length > 0) {
-        setTeacher(data[0]);
+      } else if (teachers && teachers.length > 0) {
+        setTeacher(teachers[0]);
       } else {
         setError("Nie znaleziono nauczyciela.");
       }
@@ -101,6 +101,7 @@ function ProfilePage() {
                     <Textarea name="description" id="description" placeholder="Powiedz nam coś o sobie"
                               defaultValue={teacher?.description}/>
                   </div>
+                  {/*Textarea z polem description */}
                   <div className={"space-y-2"}>
                     <Label htmlFor="name">Miasto</Label>
                     <Select name={"city"} defaultValue={teacher?.city}>
@@ -115,17 +116,17 @@ function ProfilePage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className={"flex flex-col space-y-2"}>
+                  <div className={"space-y-2"}>
                     <Label htmlFor="online">Udzielam lekcji online</Label>
-                    <Switch name={"online"} id="online" checked={teacher?.online} onCheckedChange={()=>toggleTeachersBooleanPropertyState("online")}/>
+                    <Switch name={"online"} id="online" checked={teacher?.online} onCheckedChange={()=>toggleTeacherBooleanParameter("online")}/>
                   </div>
-                  <div className={"flex flex-col space-y-2"}>
+                  <div className={"space-y-2"}>
                     <Label htmlFor="students_location">Udzielam lekcji online</Label>
-                    <Switch name={"students_location"} id="students_location" checked={teacher?.students_location} onCheckedChange={()=>toggleTeachersBooleanPropertyState("students_location")}/>
+                    <Switch name={"students_location"} id="students_location" checked={teacher?.students_location} onCheckedChange={()=>toggleTeacherBooleanParameter("students_location")}/>
                   </div>
-                  <div className={"flex flex-col space-y-2"}>
+                  <div className={"space-y-2"}>
                     <Label htmlFor="teachers_location">Udzielam lekcji online</Label>
-                    <Switch name={"teachers_location"} id="teachers_location" checked={teacher?.teachers_location} onCheckedChange={()=>toggleTeachersBooleanPropertyState("teachers_location")}/>
+                    <Switch name={"teachers_location"} id="teachers_location" checked={teacher?.teachers_location} onCheckedChange={()=>toggleTeacherBooleanParameter("teachers_location")}/>
                   </div>
                   <Input name={"id"} value={teacher?.id} type={"hidden"}/>
                   <div className="text-xs text-muted-foreground">ID: {teacher?.id}</div>
