@@ -11,22 +11,22 @@ import {
 
 let subjects = [
     {
-        przedmiot: "Matematyka",
+        name: "Matematyka",
         status: true,
-        iloscNauczycieli: 32,
-        iloscUczniow: 174
+        teachersNo: 32,
+        studentsNo: 174
     },
     {
-        przedmiot: "Programowanie",
+        name: "Programowanie",
         status: false,
-        iloscNauczycieli: "0",
-        iloscUczniow: 2
+        teachersNo: "0",
+        studentsNo: 2
     },
     {
-        przedmiot: "Język Angielski",
+        name: "Język Angielski",
         status: true,
-        iloscNauczycieli: 27,
-        iloscUczniow: 142
+        teachersNo: 27,
+        studentsNo: 142
     }
 ];
 
@@ -35,10 +35,10 @@ export default function SubjectPage()   {
         <>
 
             <Table>
-                <TableCaption>Informacje o dostępnych na stronie przedmiotach</TableCaption>
+                <TableCaption>Informacje o dostępnych na stronie nameach</TableCaption>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[100px]">Przedmiot</TableHead>
+                        <TableHead className="w-[100px]">name</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Ilość nauczycieli</TableHead>
                         <TableHead className="text-right">Ilość uczniów</TableHead>
@@ -47,10 +47,10 @@ export default function SubjectPage()   {
                 <TableBody>
                     { subjects.map((subject, index) => (
                         <TableRow key={index}>
-                            <TableCell className="font-medium">{subject.przedmiot}</TableCell>
+                            <TableCell className="font-medium">{subject.name}</TableCell>
                             <TableCell>{subject.status?"Dostępne":"Strajk"}</TableCell>
-                            <TableCell>{subject.iloscNauczycieli}</TableCell>
-                            <TableCell className="text-right">{subject.iloscUczniow}</TableCell>
+                            <TableCell>{subject.teachersNo}</TableCell>
+                            <TableCell className="text-right">{subject.studentsNo}</TableCell>
                         </TableRow>
                     ))}
 
