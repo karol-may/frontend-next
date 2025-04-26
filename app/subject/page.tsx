@@ -35,6 +35,7 @@ export default function SubjectPage()   {
         <>
 
             <Table>
+                <TableCaption>Informacje o dostępnych na stronie przedmiotach</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">Przedmiot</TableHead>
