@@ -1,4 +1,32 @@
-import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
+import {
+    Table,
+    TableBody,
+    TableCaption, TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@/components/ui/table"
+
+let subjects = [
+    {
+        przedmiot: "Matematyka",
+        status: "Dostępne",
+        iloscNauczycieli: 32,
+        iloscUczniow: 174
+    },
+    {
+        przedmiot: "Programowanie",
+        status: "Niedostępne",
+        iloscNauczycieli: "0 (aktualnie na strajku)",
+        iloscUczniow: 2
+    },
+    {
+        przedmiot: "Język Angielski",
+        status: "Dostępne",
+        iloscNauczycieli: 27,
+        iloscUczniow: 142
+    }
+];
 
 export default function SubjectPage()   {
     return (
