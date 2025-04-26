@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers";
 import { createClient } from '@/utils/supabase/server'
-import {existTeacher} from "@/components/teachers/actions";
+import { fetchTeacher } from "@/components/teachers/actions";
 
 export async function login(formData: FormData) {
     const supabase = await createClient(cookies())
@@ -19,7 +19,7 @@ export async function login(formData: FormData) {
     const { data: {user}, error } = await supabase.auth.signInWithPassword(data)
 
     if (user) {
-        const teacher = await existTeacher(user.id);
+        const teacher = await fetchTeacher(user.id);
         console.log("===================================================")
         console.log(teacher)
     } else {
