@@ -13,25 +13,25 @@ export default function CityPage() {
     let cities = [
         {
             miasto: "Łódź",
-            status: "🔴",
+            status: false,
             liczbaNauczycieli: 18,
             liczbaUczniow: 68
         },
         {
             miasto: "Poznań",
-            status: "🔴",
+            status: false,
             liczbaNauczycieli: 16,
             liczbaUczniow: 52
         },
         {
             miasto: "Wyszków",
-            status: "🟢",
+            status: true,
             liczbaNauczycieli: 5,
             liczbaUczniow: 29
         },
         {
             miasto: "Warszawa",
-            status: "🟢",
+            status: true,
             liczbaNauczycieli: 23,
             liczbaUczniow: 71.5
         }
@@ -50,30 +50,18 @@ export default function CityPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">Łódź</TableCell>
-                        <TableCell>🔴</TableCell>
-                        <TableCell className="text-right">18</TableCell>
-                        <TableCell className="text-right">68</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">Poznań</TableCell>
-                        <TableCell>🔴</TableCell>
-                        <TableCell className="text-right">16</TableCell>
-                        <TableCell className="text-right">52</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">Wyszków</TableCell>
-                        <TableCell>🟢</TableCell>
-                        <TableCell className="text-right">5</TableCell>
-                        <TableCell className="text-right">29</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell className="font-medium">Warszawa</TableCell>
-                        <TableCell>🟢</TableCell>
-                        <TableCell className="text-right">23</TableCell>
-                        <TableCell className="text-right">71,5</TableCell>
-                    </TableRow>
+                    {
+                        cities.map((city, index)=> {
+                           return (
+                               <TableRow key={index}>
+                                   <TableCell className="font-medium">{city.miasto}</TableCell>
+                                   <TableCell>{city.status?"🟢":"🔴"}</TableCell>
+                                   <TableCell className="text-right">{city.liczbaNauczycieli}</TableCell>
+                                   <TableCell className="text-right">{city.liczbaUczniow}</TableCell>
+                               </TableRow>
+                           )
+                        })
+                    }
                 </TableBody>
             </Table>
         </>
