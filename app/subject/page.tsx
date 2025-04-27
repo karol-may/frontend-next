@@ -32,7 +32,7 @@ export default function SubjectPage()   {
         <>
 
             <Table>
-                <TableCaption>Informacje o dostępnych na stronie nameach</TableCaption>
+                <TableCaption>Informacje o dostępnych na stronie przedmiotach.</TableCaption>
                 <TableHeader>
                     <TableRow>
                         <TableHead className="w-[100px]">name</TableHead>
