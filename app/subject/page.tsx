@@ -14,13 +14,12 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table"
-import {addCity} from "@/components/city/action";
-
 
 export default function SubjectPage() {
     const [subjects, setSubjects] = useState<Subject[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [editMode, setEditMode] = useState<boolean>(false);
+    const [formData, setFormData] = useState<FormData|null>(null)
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     useEffect(() => {
@@ -35,7 +34,7 @@ export default function SubjectPage() {
             })
             .catch(otherError => setError(otherError)); // Obsługa nieoczekiwanych błędów
     }, []);
-
+  
     function handleSubjectSubmit(data: any) {
         addSubject(data).then().catch(otherError => setError(null));
     }
