@@ -34,9 +34,9 @@ export async function addCity(city : City) : Promise<CitiesControllerInterface>
     const supabase = createClient();
 
     const query = supabase
-        .from('city')
+        .from('cities')
         .insert([
-            city as City,
+            { name : city.name }
         ])
         .select()
 
@@ -48,7 +48,7 @@ export async function updateCity(city: City): Promise<CitiesControllerInterface>
     const supabase = createClient();
 
     const query = supabase
-        .from('city')
+        .from('cities')
         .update([
             city as City,
         ])

@@ -1,6 +1,8 @@
 "use client";
-import { fetchCities } from "@/components/city/action";
+import {addCity, fetchCities } from "@/components/city/action";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
     Table,
     TableBody,
@@ -12,11 +14,14 @@ import {
 } from "@/components/ui/table"
 import { City } from "@/types/City";
 import { useEffect, useState } from "react";
+import { useForm } from 'react-hook-form';
 
 export default function CityPage() {
     const [cities, setCities] = useState<City[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [editMode, setEditMode] = useState<boolean>(false);
+    const [formData, setFormData] = useState<FormData|null>(null)
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     useEffect(() => {
         fetchCities()
@@ -32,9 +37,21 @@ export default function CityPage() {
             .catch(otherError => setError(otherError)); // Obsługa nieoczekiwanych błędów
     }, []);
 
+
+    function handleCitySubmit(data: any) {
+        addCity(data).then().catch(otherError => setError(null));
+    }
+
     return (
         <>
-            {editMode ? (<h1>FORM</h1>):(
+            <p>{error?.message }</p>
+            {editMode ? (
+                <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleCitySubmit)}>
+                    <Label>Nazwa miasta</Label>
+                    <Input {...register("name", { required: true })} />
+                    <Button type={"submit"} className={""}>Dodaj Miasto</Button>
+                </form>
+                ):(
                 <div className="flex flex-col space-y-4">
                     <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Miasto</Button>
                     <Table>
