@@ -1,3 +1,6 @@
+"use client";
+import { fetchCities } from "@/components/city/action";
+import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -7,64 +10,66 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { City } from "@/types/City";
+import { useEffect, useState } from "react";
 
 export default function CityPage() {
+    const [cities, setCities] = useState<City[]|null>(null);
+    const [error, setError] = useState<Error | null>(null);
+    const [editMode, setEditMode] = useState<boolean>(false);
 
-    let cities = [
-        {
-            name: "Łódź",
-            status: false,
-            teachersNo: 18,
-            studentsNo: 68
-        },
-        {
-            name: "Poznań",
-            status: false,
-            teachersNo: 16,
-            studentsNo: 52
-        },
-        {
-            name: "Wyszków",
-            status: true,
-            teachersNo: 5,
-            studentsNo: 29
-        },
-        {
-            name: "Warszawa",
-            status: true,
-            teachersNo: 23,
-            studentsNo: 71.5
-
-        }
-]
+    useEffect(() => {
+        fetchCities()
+            .then(
+                ({ data, error }) => {
+                if (error) {
+                    setError(error);
+                } else {
+                    setCities(data);
+                    setError(null); // Czyszczenie błędu, jeśli zapytanie się powiodło
+                }
+            })
+            .catch(otherError => setError(otherError)); // Obsługa nieoczekiwanych błędów
+    }, []);
 
     return (
         <>
-            <Table>
-                <TableCaption>Lista miast obsługiwanych przez system.</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">name</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Liczba Nauczycieli</TableHead>
-                        <TableHead className="text-right">Liczba Uczniów</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {
-                        cities.map((city, index)=> {
-                           return (
-                               <TableRow key={index}>
-                                   <TableCell className="font-medium">{city.name}</TableCell>
-                                   <TableCell>{city.status?"🟢":"🔴"}</TableCell>
-                                   <TableCell className="text-right">{city.teachersNo}</TableCell>
-                                   <TableCell className="text-right">{city.studentsNo}</TableCell>
-                               </TableRow>
-                           )
-                        })
-                    }
-                </TableBody>
-            </Table>
+            {editMode ? (<h1>FORM</h1>):(
+                <div className="flex flex-col space-y-4">
+                    <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Miasto</Button>
+                    <Table>
+                        <TableCaption>Lista miast obsługiwanych przez system.</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Nazwa</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead className="text-right">Liczba Nauczycieli</TableHead>
+                                <TableHead className="text-right">Liczba Uczniów</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {
+                                cities?.map((city, index)=> {
+                                    return (
+                                        <TableRow key={index}>
+                                            <TableCell className="font-medium">{city.name}</TableCell>
+                                            <TableCell>{city.status?"🟢":"🔴"}</TableCell>
+                                            <TableCell className="text-right">{city.teachersNo}</TableCell>
+                                            <TableCell className="text-right">{city.studentsNo}</TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                            }
+                        </TableBody>
+                    </Table>
+                </div>
+            )}
+
+
+
+
+
+
         </>
     )
 }
