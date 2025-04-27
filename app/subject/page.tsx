@@ -46,13 +46,13 @@ export default function SubjectPage()   {
             <p>{error?.message }</p>
             {editMode ? (
                 <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleSubjectSubmit)}>
-                    <Label>Nazwa miasta</Label>
+                    <Label>Nazwa przedmiotu</Label>
                     <Input {...register("name", { required: true })} />
-                    <Button type={"submit"} className={""}>Dodaj Miasto</Button>
+                    <Button type={"submit"} className={""}>Dodaj przedmiot</Button>
                 </form>
             ):(
                 <div className="flex flex-col space-y-4">
-                    <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Miasto</Button>
+                    <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Przedmiot</Button>
                     <Table>
                         <TableCaption>Lista przedmiotów obsługiwanych przez system.</TableCaption>
                         <TableHeader>
