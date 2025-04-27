@@ -19,11 +19,11 @@ function TeachersList() {
 
   useEffect(() => {
     fetchTeachers(selectedCity, online, studentsLocation, teachersLocation, nameSearchQuery)
-      .then(({ data, error }) => {
+      .then(({ teachers, error }) => {
         if (error) {
           setError(error);
         } else {
-          setTeachers(data);
+          setTeachers(teachers);
           setError(null); // Czyszczenie błędu, jeśli zapytanie się powiodło
         }
       })
