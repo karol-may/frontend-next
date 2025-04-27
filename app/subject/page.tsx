@@ -1,7 +1,7 @@
 "use client";
 
 import { fetchSubjects } from "@/components/subject/action";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Subject } from "@/types/Subject";
 import {
     Table,
@@ -13,20 +13,16 @@ import {
     TableRow
 } from "@/components/ui/table"
 
-
-
-
-
 export default function SubjectPage()   {
     const [subjects, setSubjects] = useState<Subject[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
     useEffect(() => {
         fetchSubjects()
-            .then(({ subjects, error }) => {
+            .then(({ data, error }) => {
                 if (error) {
                     setError(error);
                 } else {
-                    setSubjects(subjects);
+                    setSubjects(data);
                     setError(null); // Czyszczenie błędu, jeśli zapytanie się powiodło
                 }
             })
