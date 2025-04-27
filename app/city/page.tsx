@@ -3,6 +3,8 @@ import {addCity, fetchCities } from "@/components/city/action";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
     Table,
     TableBody,
@@ -19,7 +21,7 @@ import { useForm } from 'react-hook-form';
 export default function CityPage() {
     const [cities, setCities] = useState<City[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
-    const [editMode, setEditMode] = useState<boolean>(false);
+    const [formMode, setFormMode] = useState<"add"|"edit"|null>(null);
     const [formData, setFormData] = useState<FormData|null>(null)
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -45,15 +47,25 @@ export default function CityPage() {
     return (
         <>
             <p>{error?.message }</p>
-            {editMode ? (
+            {formMode === "add" && (
                 <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleCitySubmit)}>
                     <Label>Nazwa miasta</Label>
                     <Input {...register("name", { required: true })} />
                     <Button type={"submit"} className={""}>Dodaj Miasto</Button>
                 </form>
-                ):(
-                <div className="flex flex-col space-y-4">
-                    <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Miasto</Button>
+                )}
+                {formMode === "edit" && (
+                    <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleCitySubmit)}>
+                        <Label>Nazwa miasta</Label>
+                        <Input {...register("name", { required: true })} />
+                        <Switch {...register("status")} />
+                        <Button type={"submit"} className={""}>Dodaj Miasto</Button>
+                    </form>
+                )}
+                    {formMode === null && (
+                        <div className="flex flex-col space-y-4">
+                            <Button className={"block"} onClick={()=>setFormMode(!formMode)}>Dodaj Miasto</Button>
+
                     <Table>
                         <TableCaption>Lista miast obsługiwanych przez system.</TableCaption>
                         <TableHeader>
