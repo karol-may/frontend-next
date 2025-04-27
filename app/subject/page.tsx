@@ -1,10 +1,7 @@
 "use client";
-
-import { addSubject, fetchSubjects } from "@/components/subject/action";
+import {addSubject, fetchSubjects } from "@/components/subject/action";
 import { useEffect, useState } from "react";
 import { Subject } from "@/types/Subject";
-import { Button } from "@/components/ui/button";
-import { useForm } from 'react-hook-form';
 import {
     Table,
     TableBody,
@@ -14,9 +11,14 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table"
+import { useForm } from 'react-hook-form';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-export default function SubjectPage() {
-    const [subjects, setSubjects] = useState<Subject[] | null>(null);
+
+export default function SubjectPage()   {
+    const [subjects, setSubjects] = useState<Subject[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormData|null>(null)
@@ -24,7 +26,7 @@ export default function SubjectPage() {
 
     useEffect(() => {
         fetchSubjects()
-            .then(({data, error}) => {
+            .then(({ data, error }) => {
                 if (error) {
                     setError(error);
                 } else {
@@ -41,27 +43,34 @@ export default function SubjectPage() {
 
     return (
         <>
-            {editMode ? (<h1>FORM</h1>) : (
+            <p>{error?.message }</p>
+            {editMode ? (
+                <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleSubjectSubmit)}>
+                    <Label>Nazwa miasta</Label>
+                    <Input {...register("name", { required: true })} />
+                    <Button type={"submit"} className={""}>Dodaj Miasto</Button>
+                </form>
+            ):(
                 <div className="flex flex-col space-y-4">
-                    <Button className={"block"} onClick={() => setEditMode(!editMode)}>Dodaj Przedmiot</Button>
+                    <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Miasto</Button>
                     <Table>
-                        <TableCaption>Informacje o dostępnych na stronie przedmiotach.</TableCaption>
+                        <TableCaption>Lista przedmiotów obsługiwanych przez system.</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">name</TableHead>
+                                <TableHead className="w-[100px]">Nazwa</TableHead>
                                 <TableHead>Status</TableHead>
-                                <TableHead>Ilość nauczycieli</TableHead>
-                                <TableHead className="text-right">Ilość uczniów</TableHead>
+                                <TableHead className="text-right">Liczba Nauczycieli</TableHead>
+                                <TableHead className="text-right">Liczba Uczniów</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {
-                                subjects?.map((subject, index) => {
+                                subjects?.map((subject, index)=> {
                                     return (
                                         <TableRow key={index}>
                                             <TableCell className="font-medium">{subject.name}</TableCell>
-                                            <TableCell>{subject.status ? "Dostępne" : "Strajk"}</TableCell>
-                                            <TableCell>{subject.teachersNo}</TableCell>
+                                            <TableCell>{subject.status?"🟢":"🔴"}</TableCell>
+                                            <TableCell className="text-right">{subject.teachersNo}</TableCell>
                                             <TableCell className="text-right">{subject.studentsNo}</TableCell>
                                         </TableRow>
                                     )
@@ -73,5 +82,5 @@ export default function SubjectPage() {
             )}
 
         </>
-    )
+    );
 }
