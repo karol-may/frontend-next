@@ -1,6 +1,5 @@
 "use client";
-
-import { fetchSubjects } from "@/components/subject/action";
+import {addSubject, fetchSubjects } from "@/components/subject/action";
 import { useEffect, useState } from "react";
 import { Subject } from "@/types/Subject";
 import {
@@ -12,10 +11,18 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table"
+import { useForm } from 'react-hook-form';
+
+
+}
 
 export default function SubjectPage()   {
     const [subjects, setSubjects] = useState<Subject[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [formData, setFormData] = useState<FormData|null>(null)
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
     useEffect(() => {
         fetchSubjects()
             .then(({ data, error }) => {
@@ -28,6 +35,11 @@ export default function SubjectPage()   {
             })
             .catch(otherError => setError(otherError)); // Obsługa nieoczekiwanych błędów
     }, []);
+
+    function handleSubjectSubmit(data: any) {
+        addSubject(data).then().catch(otherError => setError(null));
+    }
+
     return (
         <>
 
