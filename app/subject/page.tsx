@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 
-
 export default function SubjectPage()   {
     const [subjects, setSubjects] = useState<Subject[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
@@ -37,7 +36,7 @@ export default function SubjectPage()   {
             })
             .catch(otherError => setError(otherError)); // Obsługa nieoczekiwanych błędów
     }, []);
-
+  
     function handleSubjectSubmit(data: any) {
         addSubject(data).then().catch(otherError => setError(null));
     }
