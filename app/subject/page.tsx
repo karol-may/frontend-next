@@ -15,12 +15,14 @@ import { useForm } from 'react-hook-form';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {Select, SelectItem} from "@/components/ui/select";
+import {Switch} from "@/components/ui/switch";
 
 
 export default function SubjectPage()   {
     const [subjects, setSubjects] = useState<Subject[]|null>(null);
     const [error, setError] = useState<Error | null>(null);
-    const [editMode, setEditMode] = useState<boolean>(false);
+    const [formMode, setFormMode] = useState<"add"|"edit"|null>(null);
     const [formData, setFormData] = useState<FormData|null>(null)
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -44,15 +46,27 @@ export default function SubjectPage()   {
     return (
         <>
             <p>{error?.message }</p>
-            {editMode ? (
+            {formMode === "add" && (
                 <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleSubjectSubmit)}>
                     <Label>Nazwa miasta</Label>
                     <Input {...register("name", { required: true })} />
-                    <Button type={"submit"} className={""}>Dodaj Miasto</Button>
                 </form>
+
+
             ):(
+
+    {formMode === "edit" && (
+        <form className={"flex flex-col space-y-4"} onSubmit={handleSubmit(handleSubjectSubmit)}>
+            <Label>Nazwa miasta</Label>
+            <Input {...register("name", { required: true })} />
+            <Label>Status</Label>
+            <Switch {...register("status",)}>
+            <Button type={"submit"} className={""}>Dodaj Miasto</Button>
+        </form>
+
+            }
                 <div className="flex flex-col space-y-4">
-                    <Button className={"block"} onClick={()=>setEditMode(!editMode)}>Dodaj Miasto</Button>
+                    <Button className={"block"} onClick={()=>setFormMode(!formMode)}>Dodaj Miasto</Button>
                     <Table>
                         <TableCaption>Lista przedmiotów obsługiwanych przez system.</TableCaption>
                         <TableHeader>
